@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef UI_PLATFORM_WINDOWS
+// #ifdef UI_PLATFORM_WINDOWS
 
 extern UiEngine::Application* UiEngine::CreateApplication();
 
@@ -11,4 +11,4 @@ int main(int argc, char** argv)
 	delete app;
 }
 
-#endif
+// #endif
