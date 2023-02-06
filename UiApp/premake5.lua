@@ -38,7 +38,36 @@ project "UiApp"
 		staticruntime "On"
 		systemversion "latest"
 
-        links { "GLFW", "imgui", "Xrandr", "Xi", "GLU", "GL", "X11", "dl", "pthread", "stdc++fs" }
+		includedirs
+		{
+			"%{wks.location}/Autofocus/Autofocus/src",
+			"%{wks.location}/Autofocus/Autofocus/vendor/RaspiCam/src/",
+			"/usr/local/include/opencv4"
+		}
+
+        links 
+		{ 
+			"GLFW", 
+			"imgui", 
+			"Xrandr", 
+			"Xi", 
+			"GLU", 
+			"GL", 
+			"X11", 
+			"dl", 
+			"pthread", 
+			"stdc++fs", 
+			"opencv_core", 
+			"opencv_highgui", 
+			"opencv_imgproc", 
+			"opencv_imgcodecs", 
+			"AutoFocus",  
+			"raspicam", 
+			"raspicam_cv", 
+			"wiringPi", 
+			"pthread"
+		}
+		
         defines { "_X11", "UI_PLATFORM_LINUX" }
 
 	filter "configurations:Debug"
