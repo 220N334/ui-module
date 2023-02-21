@@ -1,5 +1,5 @@
 #include "UiEngine.h"
-#include "UiScreens.h"
+#include "UiTestScreen.h"
 
 class UiApp : public UiEngine::Application
 {
@@ -16,11 +16,11 @@ public:
 
     void OnUpdate() override
     {
-        uiScreens.RenderUi();
+        uiTest.RenderTestUi();
     }
 
 private:
-    UiScreens uiScreens;
+    UiTestScreens uiTest;
     UiEngine::WindowProps m_props;
 };
 
