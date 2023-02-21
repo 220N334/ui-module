@@ -40,8 +40,8 @@ project "UiApp"
 
 		includedirs
 		{
-			"%{wks.location}/Autofocus/Autofocus/src",
-			"%{wks.location}/Autofocus/Autofocus/vendor/RaspiCam/src/",
+			"%{wks.location}/Autofocus/AutoFocus/src",
+			"%{wks.location}/Autofocus/AutoFocus/vendor/RaspiCam/src/",
 			"/usr/local/include/opencv4"
 		}
 
