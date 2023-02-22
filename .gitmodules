@@ -4,3 +4,6 @@
 [submodule "UiEngine/vendor/imgui"]
 	path = UiEngine/vendor/imgui
 	url = https://github.com/220N334/imgui.git
+[submodule "Autofocus"]
+	path = Autofocus
+	url = https://github.com/220N334/autofocus-module
