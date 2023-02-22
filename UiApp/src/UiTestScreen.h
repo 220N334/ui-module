@@ -14,6 +14,7 @@ public:
 	void RenderTestUi();
 
 	Autofocus::StepperMotor* motor1;
+	Autofocus::ImageAcquisition* img;
 private:
 	ImGuiWindowFlags window_flags = 0;
 };

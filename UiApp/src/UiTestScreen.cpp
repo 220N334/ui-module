@@ -24,11 +24,13 @@ UiTestScreens::UiTestScreens()
     motor1Pins.ms1 = 0;
 
 	motor1 = new Autofocus::StepperMotor(motor1Pins);
+	img = new Autofocus::ImageAcquisition();
 }
 
 UiTestScreens::~UiTestScreens()
 {
 	delete(motor1);
+	delete(img);
 }
 
 void UiTestScreens::RenderTestUi()
@@ -87,7 +89,28 @@ void UiTestScreens::RenderTestUi()
 	ImGui::End();
 
 	ImGui::Begin("Image", NULL, window_flags);
-	ImGui::SetWindowSize(ImVec2(300, 480));
-	ImGui::SetWindowPos(ImVec2(500, 0));
+	ImGui::SetWindowSize(ImVec2(400, 480));
+	ImGui::SetWindowPos(ImVec2(400, 0));
+	ImGui::Dummy(ImVec2(0.0f, 20.0f));
+	int my_image_width = 0;
+	int my_image_height = 0;
+	GLuint my_image_texture = 0;
+	UiEngine::Image image("img.png", &my_image_texture, &my_image_width, &my_image_height);
+	ImGui::Dummy(ImVec2(0.0f, 20.0f));
+	ImGui::Dummy(ImVec2(0.0f, 0.0f));
+	ImGui::SameLine();
+	ImGui::Image((void*)(intptr_t)my_image_texture, ImVec2(my_image_width, my_image_height));
+	ImGui::Dummy(ImVec2(0.0f, 20.0f));
+	ImGui::Dummy(ImVec2(100.0f, 0.0f));
+	ImGui::SameLine();
+	if (ImGui::Button("CAPTURE", ImVec2(200, 100)))
+	{
+		cv::Mat* frame = new cv::Mat;
+        img->CaptureImage(frame);
+		cv::imwrite("img1.png", *frame);
+		img->ResizeImage(frame, 250, 300);
+        cv::imwrite("img.png", *frame);
+        delete(frame);
+	}
 	ImGui::End();
 }
