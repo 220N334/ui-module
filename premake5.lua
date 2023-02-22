@@ -16,5 +16,7 @@ IncludeDir["imgui"] = "vendor/imgui"
 include "UiEngine/vendor/GLFW"
 include "UiEngine/vendor/imgui"
 
+include "Autofocus/AutoFocus/AutoFocus.lua"
+
 include "UiEngine"
 include "UiApp"

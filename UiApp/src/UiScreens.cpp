@@ -11,6 +11,20 @@ UiScreens::UiScreens()
 	style.ItemSpacing.y = 0;
 	style.WindowPadding.x = 0;
 	style.WindowPadding.y = 0;
+
+	Autofocus::StepperPins motor1Pins;
+    motor1Pins.step = 2;
+    motor1Pins.en = 1;
+    motor1Pins.dir = 0;
+    motor1Pins.ms1 = 0;
+    motor1Pins.ms1 = 0;
+
+	motor1 = new Autofocus::StepperMotor(motor1Pins);
+}
+
+UiScreens::~UiScreens()
+{
+	delete(motor1);
 }
 
 void UiScreens::RenderUi()
@@ -53,6 +67,7 @@ void UiScreens::MainScreen()
 	if (ImGui::Button("SETTINGS", ImVec2(350, 350)))
 	{
 		std::cout << "Settings" << std::endl;
+		motor1->RunMotor(1, 360, 500);
 	}
 	ImGui::End();
 }
