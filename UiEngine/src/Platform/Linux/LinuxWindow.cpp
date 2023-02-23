@@ -96,5 +96,6 @@ namespace UiEngine
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 		glfwDestroyWindow(m_Window);
+		glfwTerminate();
 	}
 }

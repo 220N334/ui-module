@@ -15,6 +15,10 @@ public:
 
 	Autofocus::StepperMotor* motor1;
 	Autofocus::ImageAcquisition* img;
+	cv::Mat* frame;
+
+	bool isCameraOpen = false;
+	bool stopWindow = false;
 private:
 	ImGuiWindowFlags window_flags = 0;
 };

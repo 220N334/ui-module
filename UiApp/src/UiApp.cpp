@@ -17,6 +17,10 @@ public:
     void OnUpdate() override
     {
         uiTest.RenderTestUi();
+        if(uiTest.stopWindow)
+        {
+            StopLoop();
+        }
     }
 
 private:
@@ -33,6 +37,6 @@ int main()
 
     UiApp* ui = new UiApp(props);
     ui->Run();
-    ui->OnUpdate();
+    //ui->OnUpdate();
     delete(ui);
 }
