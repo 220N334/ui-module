@@ -18,6 +18,7 @@ namespace UiEngine
         virtual void OnUpdate() = 0;
         void Run();
         Window& GetWindow() { return *m_Window; }
+        inline void StopLoop() { m_Running = false;}
 
     private:
         void Init(const WindowProps& props);
@@ -27,4 +28,5 @@ namespace UiEngine
         std::unique_ptr<Window> m_Window;
         bool m_Running = true;
     };
+
 }
