@@ -21,6 +21,7 @@ namespace UiEngine
 		inline unsigned int GetWidth() const override { return m_Data.Width; }
 		inline unsigned int GetHeigth() const override { return m_Data.Height; }
 
+		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
@@ -31,6 +32,7 @@ namespace UiEngine
 		{
 			std::string Title;
 			unsigned int Width, Height;
+			EventCallbackFn EventCallback;
 		};
 		WindowData m_Data;
 	};

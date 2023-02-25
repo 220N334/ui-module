@@ -33,6 +33,5 @@ int main()
 
     UiApp* ui = new UiApp(props);
     ui->Run();
-    ui->OnUpdate();
     delete(ui);
 }
