@@ -4,7 +4,9 @@
 class UiApp : public UiEngine::Application
 {
 public:
-    UiApp(UiEngine::WindowProps& props): Application(props)
+    UiApp(UiEngine::WindowProps& props) 
+        : Application(props)
+        , m_props(props)
     {
         std::cout << "Hello From App" << std::endl;
     }
