@@ -1,7 +1,7 @@
 #include "UiTestScreen.h"
 
-static int mAngle = 360;
-static int mSpeed = 300;
+static int mAngle = 720;
+static int mSpeed = 1600;
 static int mDir = 0;
 
 UiTestScreens::UiTestScreens()
@@ -23,17 +23,29 @@ UiTestScreens::UiTestScreens()
     motor1Pins.ms1 = 0;
     motor1Pins.ms1 = 0;
 
+	Autofocus::StepperPins motor2Pins;
+    motor2Pins.step = 4;
+    motor2Pins.en = 3;
+    motor2Pins.dir = 5;
+    motor2Pins.ms1 = 0;
+    motor2Pins.ms1 = 0;
+
 	motor1 = new Autofocus::StepperMotor(motor1Pins);
+	motor2 = new Autofocus::StepperMotor(motor2Pins);
 	img = new Autofocus::ImageAcquisition();
 
 	isCameraOpen = img->OpenCamera();
 	frame = new cv::Mat;
+
+	ImGuiIO& io = ImGui::GetIO();
+	mainFont = io.Fonts->AddFontFromFileTTF("fonts/Roboto-Medium.ttf", 40.0);
 }
 
 UiTestScreens::~UiTestScreens()
 {
 	img->ReleaseCamera();
 	delete(motor1);
+	delete(motor2);
 	delete(img);
     delete(frame);
 }
@@ -41,10 +53,11 @@ UiTestScreens::~UiTestScreens()
 void UiTestScreens::RenderTestUi()
 {
 	//ImGui::ShowDemoWindow();
+	ImGui::PushFont(mainFont);
     ImGui::Begin("Motor", NULL, window_flags);
 	ImGui::SetWindowSize(ImVec2(500, 480));
 	ImGui::SetWindowPos(ImVec2(0, 0));
-	ImGui::SetWindowFontScale(4.0f);
+	// ImGui::SetWindowFontScale(4.0f);
 	
 	ImGui::PushItemWidth(300);
 	ImGui::Dummy(ImVec2(0.0f, 30.0f));
@@ -55,7 +68,7 @@ void UiTestScreens::RenderTestUi()
 	ImGui::Dummy(ImVec2(0.0f, 50.0f));
 	ImGui::Dummy(ImVec2(15.0f, 0.0f));
 	ImGui::SameLine();
-	ImGui::InputInt("S", &mSpeed, 10);
+	ImGui::InputInt("S", &mSpeed, 100);
 
 	ImGui::Dummy(ImVec2(0.0f, 50.0f));
 	ImGui::Dummy(ImVec2(15.0f, 0.0f));
@@ -82,7 +95,7 @@ void UiTestScreens::RenderTestUi()
 	ImGui::SameLine();
 	if (ImGui::Button("M2", ImVec2(100, 100)))
 	{
-
+		motor2->RunMotor(mDir, mAngle, mSpeed);
 	}
 	ImGui::SameLine();
 	ImGui::Dummy(ImVec2(15.0f, 0.0f));
@@ -127,4 +140,5 @@ void UiTestScreens::RenderTestUi()
 		}
 	}
 	ImGui::End();
+	ImGui::PopFont();
 }
