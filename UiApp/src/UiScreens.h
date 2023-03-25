@@ -4,7 +4,10 @@
 
 #include "UiEngine.h"
 #include "imgui.h"
-#include "AutoFocus.h"
+
+#ifdef UI_PLATFORM_LINUX
+#include AutoFocusHandler.h
+#endif
 
 class UiScreens
 {
@@ -13,7 +16,6 @@ public:
 	~UiScreens();
 	void RenderUi();
 
-	Autofocus::StepperMotor* motor1;
 private:
 	void MainScreen();
 	void TestGuideScreen();
@@ -22,4 +24,8 @@ private:
 	int screenSelection = 0;
 
 	ImGuiWindowFlags window_flags = 0;
+
+#ifdef UI_PLATFORM_LINUX
+	AutoFocusHandler af;
+#endif
 };
