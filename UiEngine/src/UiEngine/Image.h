@@ -11,9 +11,12 @@ namespace UiEngine
 	class Image
 	{
 	public:
-		Image(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
+		Image();
 		~Image();
-	private:
+		inline GLuint GetTextureID() {return image_texture;};
+		void ShowVideoFromImage(unsigned char* imgData, int* width, int* height);
 		bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
+	private:
+		GLuint image_texture;
 	};
 }
