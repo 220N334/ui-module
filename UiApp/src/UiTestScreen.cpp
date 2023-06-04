@@ -1,7 +1,8 @@
 #include "UiTestScreen.h"
+#include <thread>
 
-static int mAngle = 720;
-static int mSpeed = 1600;
+static int mAngle = 50;
+static int mSpeed = 2500;
 static int mDir = 0;
 
 UiTestScreens::UiTestScreens()
@@ -17,21 +18,29 @@ UiTestScreens::UiTestScreens()
 	style.WindowPadding.y = 0;
 
 	Autofocus::StepperPins motor1Pins;
-    motor1Pins.step = 2;
-    motor1Pins.en = 1;
-    motor1Pins.dir = 0;
+    motor1Pins.step = 28;
+    motor1Pins.en = 29;
+    motor1Pins.dir = 27;
     motor1Pins.ms1 = 0;
     motor1Pins.ms1 = 0;
 
 	Autofocus::StepperPins motor2Pins;
-    motor2Pins.step = 4;
-    motor2Pins.en = 3;
-    motor2Pins.dir = 5;
+    motor2Pins.step = 31;
+    motor2Pins.en = 26;
+    motor2Pins.dir = 11;
     motor2Pins.ms1 = 0;
     motor2Pins.ms1 = 0;
 
+	Autofocus::StepperPins motor3Pins;
+    motor3Pins.step = 6;
+    motor3Pins.en = 10;
+    motor3Pins.dir = 5;
+    motor3Pins.ms1 = 0;
+    motor3Pins.ms1 = 0;
+
 	motor1 = new Autofocus::StepperMotor(motor1Pins);
 	motor2 = new Autofocus::StepperMotor(motor2Pins);
+	motor3 = new Autofocus::StepperMotor(motor3Pins);
 	img = new Autofocus::ImageAcquisition();
 
 	isCameraOpen = img->OpenCamera();
@@ -39,6 +48,8 @@ UiTestScreens::UiTestScreens()
 
 	ImGuiIO& io = ImGui::GetIO();
 	mainFont = io.Fonts->AddFontFromFileTTF("fonts/Roboto-Medium.ttf", 40.0);
+
+	image = UiEngine::Image();
 }
 
 UiTestScreens::~UiTestScreens()
@@ -46,8 +57,10 @@ UiTestScreens::~UiTestScreens()
 	img->ReleaseCamera();
 	delete(motor1);
 	delete(motor2);
+	delete(motor3);
 	delete(img);
     delete(frame);
+	delete(frameData);
 }
 
 void UiTestScreens::RenderTestUi()
@@ -63,7 +76,7 @@ void UiTestScreens::RenderTestUi()
 	ImGui::Dummy(ImVec2(0.0f, 30.0f));
 	ImGui::Dummy(ImVec2(15.0f, 0.0f));
 	ImGui::SameLine();
-	ImGui::InputInt("A", &mAngle, 10);
+	ImGui::InputInt("A", &mAngle, 1);
 
 	ImGui::Dummy(ImVec2(0.0f, 50.0f));
 	ImGui::Dummy(ImVec2(15.0f, 0.0f));
@@ -102,7 +115,7 @@ void UiTestScreens::RenderTestUi()
 	ImGui::SameLine();
 	if (ImGui::Button("M3", ImVec2(100, 100)))
 	{
-
+		motor3->RunMotor(mDir, mAngle, mSpeed);
 	}
 	ImGui::End();
 	//----------------------------------------------------------
@@ -121,11 +134,22 @@ void UiTestScreens::RenderTestUi()
 	int my_image_width = 0;
 	int my_image_height = 0;
 	GLuint my_image_texture = 0;
-	UiEngine::Image image("img.png", &my_image_texture, &my_image_width, &my_image_height);
+	
+	
+	//bool imageLoaded = image.LoadTextureFromFile("img.png", &my_image_texture, &my_image_width, &my_image_height);
+    //if (!imageLoaded)
+    //{
+    //    std::cout << "Image Load Failed" << std::endl;
+    //}
+	img->CaptureImage(frame);
+	frameData = new unsigned char[frame->total() * frame->elemSize()];
+	std::memcpy(frameData, frame->data, frame->total() * frame->elemSize());
+	image.ShowVideoFromImage(frameData, &frame->cols, &frame->rows);
+
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 	ImGui::Dummy(ImVec2(0.0f, 0.0f));
 	ImGui::SameLine();
-	ImGui::Image((void*)(intptr_t)my_image_texture, ImVec2(my_image_width, my_image_height));
+	ImGui::Image((void*)(intptr_t)image.GetTextureID(), ImVec2(frame->rows, frame->cols));
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 	ImGui::Dummy(ImVec2(100.0f, 0.0f));
 	ImGui::SameLine();
@@ -133,7 +157,7 @@ void UiTestScreens::RenderTestUi()
 	{
 		if(isCameraOpen)
 		{
-			img->CaptureImage(frame);
+			//img->CaptureImage(frame);
 			cv::imwrite("img1.png", *frame);
 			img->ResizeImage(frame, 400, 300);
 			cv::imwrite("img.png", *frame);
