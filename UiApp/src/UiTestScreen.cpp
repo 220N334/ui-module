@@ -1,5 +1,4 @@
 #include "UiTestScreen.h"
-#include <thread>
 
 static int mAngle = 50;
 static int mSpeed = 2500;
@@ -38,18 +37,29 @@ UiTestScreens::UiTestScreens()
     motor3Pins.ms1 = 0;
     motor3Pins.ms1 = 0;
 
+	Autofocus::StepperPins motor4Pins;
+    motor4Pins.step = 1;
+    motor4Pins.en = 4;
+    motor4Pins.dir = 16;
+    motor4Pins.ms1 = 0;
+    motor4Pins.ms1 = 0;
+
 	motor1 = new Autofocus::StepperMotor(motor1Pins);
 	motor2 = new Autofocus::StepperMotor(motor2Pins);
 	motor3 = new Autofocus::StepperMotor(motor3Pins);
+	motor4 = new Autofocus::StepperMotor(motor4Pins);
+	
 	img = new Autofocus::ImageAcquisition();
-
 	isCameraOpen = img->OpenCamera();
+    // cv::Mat blueImage(100, 100, CV_8UC3, cv::Scalar(255, 0, 0));
 	frame = new cv::Mat;
+	image = new UiEngine::Image();
 
 	ImGuiIO& io = ImGui::GetIO();
 	mainFont = io.Fonts->AddFontFromFileTTF("fonts/Roboto-Medium.ttf", 40.0);
 
-	image = UiEngine::Image();
+	//streamThread = new std::thread(&Utils::StreamLoop, std::ref(utils), img, frame, image);
+	motor3->RunMotor(0, 450, 2500);
 }
 
 UiTestScreens::~UiTestScreens()
@@ -58,9 +68,11 @@ UiTestScreens::~UiTestScreens()
 	delete(motor1);
 	delete(motor2);
 	delete(motor3);
+	delete(motor4);
 	delete(img);
     delete(frame);
 	delete(frameData);
+	delete(image);
 }
 
 void UiTestScreens::RenderTestUi()
@@ -131,28 +143,33 @@ void UiTestScreens::RenderTestUi()
 	}
 
 	//ImGui::Dummy(ImVec2(0.0f, 20.0f));
-	int my_image_width = 0;
-	int my_image_height = 0;
-	GLuint my_image_texture = 0;
-	
-	
+	//int my_image_width = 0;
+	//int my_image_height = 0;
+	//GLuint my_image_texture = 0;
 	//bool imageLoaded = image.LoadTextureFromFile("img.png", &my_image_texture, &my_image_width, &my_image_height);
     //if (!imageLoaded)
     //{
     //    std::cout << "Image Load Failed" << std::endl;
     //}
+
 	img->CaptureImage(frame);
 	frameData = new unsigned char[frame->total() * frame->elemSize()];
 	std::memcpy(frameData, frame->data, frame->total() * frame->elemSize());
-	image.ShowVideoFromImage(frameData, &frame->cols, &frame->rows);
+	image->ShowVideoFromImage(frameData, &frame->cols, &frame->rows);
+
+	if(!calibrationComplated)
+	{
+		calibrationComplated = utils.FocusAlgorithm(frame, motor4);
+	}
 
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 	ImGui::Dummy(ImVec2(0.0f, 0.0f));
 	ImGui::SameLine();
-	ImGui::Image((void*)(intptr_t)image.GetTextureID(), ImVec2(frame->rows, frame->cols));
+	ImGui::Image((void*)(intptr_t)image->GetTextureID(), ImVec2(frame->rows, frame->cols));
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 	ImGui::Dummy(ImVec2(100.0f, 0.0f));
 	ImGui::SameLine();
+
 	if (ImGui::Button("CAPTURE", ImVec2(200, 100)))
 	{
 		if(isCameraOpen)
