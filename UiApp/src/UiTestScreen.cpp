@@ -175,9 +175,14 @@ void UiTestScreens::RenderTestUi()
 		if(isCameraOpen)
 		{
 			//img->CaptureImage(frame);
-			cv::imwrite("img1.png", *frame);
+			std::string imgName 		=  std::to_string(m_cameraIndex) + ".png";
+			std::string imgNameResized 	=  "Resized" + std::to_string(m_cameraIndex) + ".png";
+
+			cv::imwrite(imgName, *frame);
 			img->ResizeImage(frame, 400, 300);
-			cv::imwrite("img.png", *frame);
+			cv::imwrite(imgNameResized, *frame);
+
+			m_cameraIndex += 1;
 		}
 	}
 	ImGui::End();

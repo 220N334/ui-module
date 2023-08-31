@@ -36,4 +36,6 @@ private:
 	UiEngine::Image* image;
 
 	std::thread* streamThread;
+
+	int m_cameraIndex = 0;
 };
