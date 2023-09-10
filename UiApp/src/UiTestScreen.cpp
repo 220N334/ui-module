@@ -58,8 +58,8 @@ UiTestScreens::UiTestScreens()
 	ImGuiIO& io = ImGui::GetIO();
 	mainFont = io.Fonts->AddFontFromFileTTF("fonts/Roboto-Medium.ttf", 40.0);
 
-	//streamThread = new std::thread(&Utils::StreamLoop, std::ref(utils), img, frame, image);
-	motor3->RunMotor(0, 450, 2500);
+	img->StreamThread(frame);
+	//motor3->RunMotor(0, 450, 2500);
 }
 
 UiTestScreens::~UiTestScreens()
@@ -71,8 +71,8 @@ UiTestScreens::~UiTestScreens()
 	delete(motor4);
 	delete(img);
     delete(frame);
-	delete(frameData);
 	delete(image);
+	delete(frameData);
 }
 
 void UiTestScreens::RenderTestUi()
@@ -120,7 +120,7 @@ void UiTestScreens::RenderTestUi()
 	ImGui::SameLine();
 	if (ImGui::Button("M2", ImVec2(100, 100)))
 	{
-		motor2->RunMotor(mDir, mAngle, mSpeed);
+		motor2->RunMotorInThread(mDir, mAngle, mSpeed);
 	}
 	ImGui::SameLine();
 	ImGui::Dummy(ImVec2(15.0f, 0.0f));
@@ -142,30 +142,20 @@ void UiTestScreens::RenderTestUi()
 		stopWindow = true;
 	}
 
-	//ImGui::Dummy(ImVec2(0.0f, 20.0f));
-	//int my_image_width = 0;
-	//int my_image_height = 0;
-	//GLuint my_image_texture = 0;
-	//bool imageLoaded = image.LoadTextureFromFile("img.png", &my_image_texture, &my_image_width, &my_image_height);
-    //if (!imageLoaded)
-    //{
-    //    std::cout << "Image Load Failed" << std::endl;
-    //}
-
-	img->CaptureImage(frame);
 	frameData = new unsigned char[frame->total() * frame->elemSize()];
 	std::memcpy(frameData, frame->data, frame->total() * frame->elemSize());
 	image->ShowVideoFromImage(frameData, &frame->cols, &frame->rows);
+	delete(frameData);
 
-	if(!calibrationComplated)
-	{
-		calibrationComplated = utils.FocusAlgorithm(frame, motor4);
-	}
+	// if(!calibrationComplated)
+	// {
+	// 	calibrationComplated = utils.FocusAlgorithm(frame, motor4);
+	// }
 
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 	ImGui::Dummy(ImVec2(0.0f, 0.0f));
 	ImGui::SameLine();
-	ImGui::Image((void*)(intptr_t)image->GetTextureID(), ImVec2(frame->rows, frame->cols));
+	ImGui::Image((void*)(intptr_t)image->GetTextureID(), ImVec2(frame->cols, frame->rows));
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 	ImGui::Dummy(ImVec2(100.0f, 0.0f));
 	ImGui::SameLine();
@@ -174,13 +164,12 @@ void UiTestScreens::RenderTestUi()
 	{
 		if(isCameraOpen)
 		{
-			//img->CaptureImage(frame);
 			std::string imgName 		=  std::to_string(m_cameraIndex) + ".png";
 			std::string imgNameResized 	=  "Resized" + std::to_string(m_cameraIndex) + ".png";
 
 			cv::imwrite(imgName, *frame);
-			img->ResizeImage(frame, 400, 300);
-			cv::imwrite(imgNameResized, *frame);
+			// img->ResizeImage(frame, 400, 300);
+			// cv::imwrite(imgNameResized, *frame);
 
 			m_cameraIndex += 1;
 		}

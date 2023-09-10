@@ -15,9 +15,9 @@ void Utils::StreamLoop(Autofocus::ImageAcquisition* img, cv::Mat* frame, UiEngin
     while(true)
     {
         img->CaptureImage(frame);
-        frameData = new unsigned char[frame->total() * frame->elemSize()];
-        std::memcpy(frameData, frame->data, frame->total() * frame->elemSize());
-	    image->ShowVideoFromImage(frameData, &frame->cols, &frame->rows);
+        // frameData = new unsigned char[frame->total() * frame->elemSize()];
+        // std::memcpy(frameData, frame->data, frame->total() * frame->elemSize());
+	    // image->ShowVideoFromImage(frameData, &frame->cols, &frame->rows);
     }
 }
 

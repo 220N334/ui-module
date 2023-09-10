@@ -23,6 +23,7 @@ public:
 
 	Autofocus::ImageAcquisition* img;
 	cv::Mat* frame;
+
 	unsigned char* frameData;
 
 	bool isCameraOpen = false;
@@ -34,8 +35,5 @@ private:
 	ImGuiWindowFlags window_flags = 0;
 	ImFont* mainFont;
 	UiEngine::Image* image;
-
-	std::thread* streamThread;
-
 	int m_cameraIndex = 0;
 };
