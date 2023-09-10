@@ -7,6 +7,8 @@
 
 #include "Core.h"
 #include "Window.h"
+#include "Events/Event.h"
+#include "Events/ApplicationEvent.h"
 
 namespace UiEngine
 {
@@ -16,13 +18,19 @@ namespace UiEngine
         Application(const WindowProps& props);
         virtual ~Application();
         virtual void OnUpdate() = 0;
+
+        virtual void OnCloseEvent(){};
+
         void Run();
+        void OnEvent(Event& e);
+
         Window& GetWindow() { return *m_Window; }
         inline void StopLoop() { m_Running = false;}
 
     private:
         void Init(const WindowProps& props);
         void ShutDown();
+        bool OnWindowClose(WindowCloseEvent& e);
 
     private:
         std::unique_ptr<Window> m_Window;
