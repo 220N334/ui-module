@@ -10,3 +10,9 @@ Changelog added.
 
 ## 13.08.2022 - Multi Platform Support
 * Prepared ui system for basic input and showing images.
+
+## 09.10.2023 - Autofocus, Test Screen, Motor Control and Threading
+* Motor control integrated and motor variables created.
+* Autofocus algorithm integrated.
+* Sequential image capturing and video streaming enabled.
+* UI Independent functions moved to threads (Image grabbing, Motor driving).

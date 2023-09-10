@@ -71,7 +71,7 @@ void UiScreens::TestGuideScreen()
 	int my_image_width = 0;
 	int my_image_height = 0;
 	GLuint my_image_texture = 0;
-	UiEngine::Image image("images/PixelEngine.png", &my_image_texture, &my_image_width, &my_image_height);
+	//UiEngine::Image image("images/PixelEngine.png", &my_image_texture, &my_image_width, &my_image_height);
 	
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 
@@ -119,7 +119,7 @@ void UiScreens::TestProgressScreen()
 	int my_image_width = 0;
 	int my_image_height = 0;
 	GLuint my_image_texture = 0;
-	UiEngine::Image image("images/PixelEngine420.png", &my_image_texture, &my_image_width, &my_image_height);
+	//UiEngine::Image image("images/PixelEngine420.png", &my_image_texture, &my_image_width, &my_image_height);
 	
 	ImGui::Dummy(ImVec2(0.0f, 30.0f));
 	ImGui::Dummy(ImVec2(40.0f, 0.0f));

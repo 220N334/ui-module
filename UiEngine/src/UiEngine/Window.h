@@ -34,7 +34,8 @@ namespace UiEngine
 		virtual ~Window() {};
 		virtual void OnUpdate() = 0;
 		virtual void OnLastUpdate() = 0;
-
+		virtual void Shutdown() = 0;
+		
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeigth() const = 0;
 

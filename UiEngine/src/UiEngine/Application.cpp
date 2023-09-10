@@ -46,6 +46,6 @@ namespace UiEngine
 
 	void Application::ShutDown()
 	{
-
+		m_Window->Shutdown();
 	}
 }

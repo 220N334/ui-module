@@ -1,12 +1,10 @@
 #include "UiEngine.h"
-#include "UiScreens.h"
+#include "UiTestScreen.h"
 
 class UiApp : public UiEngine::Application
 {
 public:
-    UiApp(UiEngine::WindowProps& props) 
-        : Application(props)
-        , m_props(props)
+    UiApp(UiEngine::WindowProps& props): Application(props)
     {
         std::cout << "Hello From App" << std::endl;
     }
@@ -18,11 +16,15 @@ public:
 
     void OnUpdate() override
     {
-        uiScreens.RenderUi();
+        uiTest.RenderTestUi();
+        if(uiTest.stopWindow)
+        {
+            StopLoop();
+        }
     }
 
 private:
-    UiScreens uiScreens;
+    UiTestScreens uiTest;
     UiEngine::WindowProps m_props;
 };
 
@@ -35,5 +37,6 @@ int main()
 
     UiApp* ui = new UiApp(props);
     ui->Run();
+    //ui->OnUpdate();
     delete(ui);
 }
