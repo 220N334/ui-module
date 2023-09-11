@@ -120,7 +120,7 @@ void UiTestScreens::RenderTestUi()
 	ImGui::SameLine();
 	if (ImGui::Button("M2", ImVec2(100, 100)))
 	{
-		motor2->RunMotorInThread(mDir, mAngle, mSpeed);
+		motor2->RunMotor(mDir, mAngle, mSpeed);
 	}
 	ImGui::SameLine();
 	ImGui::Dummy(ImVec2(15.0f, 0.0f));
